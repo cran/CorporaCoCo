@@ -3,22 +3,36 @@
 
 \title{Calculate Surface Co-occurrence Counts}
 \description{
-  Calculates all surface co-occurrence counts for the supplied vector.
+  Calculates co-occurrence counts for the supplied vector.
   For each co-occurrence the maximum possible number of co-occurrences
   is also calculated.
 }
 
 \usage{
-  surface(x, span)
+  surface(x, span, nodes = NULL, collocates = NULL)
 }
 
 \arguments{
   \item{x}{
     A vector. This is the subject of the co-occurrence counting.
+    See details.
   }
   \item{span}{
     A character string defining the co-occurrence span.
     See details.
+  }
+  \item{nodes}{
+    A \code{character vector} of nodes or \code{character string}
+    representing a single \code{node}.
+    The \var{nodes} essentially act as a filter on the \var{x} column
+    of the returned data structure. Use of \code{nodes} will
+    significantly reduce memory usage.
+  }
+  \item{collocates}{
+    A \code{character vector} of collocates or \code{character string}
+    representing a single collocate.
+    The \var{collocates} essentially act as a filter on the \var{y} column
+    of the returned data structure.
   }
 }
 
@@ -42,14 +56,14 @@
      - attr(*, ".internal.selfref")=<externalptr> 
 }
   where \code{H} is the number of times \code{x} co-occurs with \code{y}
-  think \code{H}its), and \code{M} is the number of times \code{x}
-  fails to co-occurs with \code{y} when it could have (think
-  \code{M}isses); hence \code{N + M} is the maximum number of times
-  that \code{x} could have co-occured with \code{y}.
+  (think \emph{H}its), and \code{M} is the number of times \code{x}
+  fails to co-occur with \code{y} when it could have (think
+  \emph{M}isses); hence \code{H + M} is the maximum number of times
+  that \code{x} could have co-occurred with \code{y}.
 }
 
 \details{
-  \var{x} is assumed to be a vector of tokenized text.
+  \var{x} is assumed to be an ordered vector of tokenized text.
   No processing will be applied to \code{x} prior to the co-occurrence
   count calculations.
 
@@ -60,6 +74,9 @@
     ("a", "man", "a", "plan", "a", "cat", "a", "canal", "panama")
           |___________|____|___________|
 }
+  In this example the term \dQuote{plan} would co-occur once each with
+  the collocates \dQuote{man} and \dQuote{cat}, and twice with the collocate
+  \dQuote{a}.
 
   Other examples of \code{span}:
 
@@ -75,20 +92,15 @@
                       |____|___________|
 }
 
-  In this example the term \dQuote{plan} would co-occur once each with
-  the terms \dQuote{man} and \dQuote{cat}, and twice with the term
-  \dQuote{a}.
+  \code{NA}s can be used to implement co-occurrence barriers
+  eg if two \code{NA} characters are inserted
+  into \var{x} at each sentence boundary then with \code{span = 2}
+  co-occurrences will not happen across sentences.
+  See Evert (2008) for detailed description of co-occurrence barriers.
+
   For a detailed description of \sQuote{surface} co-occurrence and the
   other types of co-occurrence see Evert (2008).
 
-  \code{NA}s can be used to implement co-occurrence barriers
-  (see Evert (2008) for a description of co-occurrence barriers);
-  eg if two \code{NA} characters are inserted
-  into \var{x} at each sentence boundary then with \code{span = 2}
-  co-occurences will not happen accross sentences.
-
-  In the returned data structure the number of \code{M}isses is
-  exactly.
 }
 
 \examples{
@@ -110,6 +122,25 @@
     ##  8:   man   plan 1 1
     ##  9:  plan      a 1 1
     ## 10:  plan  canal 1 1
+
+
+    # filter on nodes
+    surface(x, span = '2R', nodes = c("canal", "man", "plan"))
+
+    ##         x      y H M
+    ##  1: canal panama 1 0
+    ##  2:   man      a 1 1
+    ##  3:   man   plan 1 1
+    ##  4:  plan      a 1 1
+    ##  5:  plan  canal 1 1
+
+    # filter on nodes and collocates
+    surface(x, span = '2R', nodes = c("canal", "man", "plan"), collocates = c("panama", "a"))
+
+    ##         x      y H M
+    ##  1: canal panama 1 0
+    ##  2:   man      a 1 1
+    ##  3:  plan      a 1 1
 
 
     # co-occurrence barrier

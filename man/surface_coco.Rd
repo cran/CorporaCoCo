@@ -8,7 +8,7 @@
 }
 
 \usage{
-  surface_coco(a, b, span, nodes, fdr = 0.01)
+  surface_coco(a, b, span, nodes, fdr = 0.01, collocates = NULL)
 }
 
 \arguments{
@@ -23,10 +23,15 @@
     See \code{\link{surface}} function for details.
   }
   \item{nodes}{
-    A \code{charactor vector} of nodes.
+    A \code{character vector} of nodes or \code{character string}
+    representing a single node.
   }
   \item{fdr}{
     The desired level at which to control the False Discovery Rate.
+  }
+  \item{collocates}{
+    A \code{character vector} of collocates or \code{character string}
+    representing a single collocate.
   }
 }
 
@@ -40,6 +45,6 @@
 
   For an example of usage see the
   \sQuote{\href{../doc/proof_of_concept.pdf}{Proof of Concept}}
-  document.
+  vignette.
 }
 
