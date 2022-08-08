@@ -1,13 +1,14 @@
 \name{surface_coco}
 \alias{surface_coco}
 
-\title{Surface co-occurrence comparison}
+\title{Deprecated -- Surface co-occurrence comparison}
 \description{
   Convenience function that combined the functionality of the
   \code{\link{surface}} and \code{\link{coco}} functions.
 }
 
 \usage{
+  # Deprecated
   surface_coco(a, b, span, nodes, fdr = 0.01, collocates = NULL)
 }
 
@@ -42,9 +43,5 @@
 
 \details{
   See \code{\link{surface}} and \code{\link{coco}}.
-
-  For an example of usage see the
-  \sQuote{\href{../doc/proof_of_concept.pdf}{Proof of Concept}}
-  vignette.
 }
 
